@@ -97,7 +97,6 @@ jobs:
             --query 'data [0]."public-ip"' \
             --raw-output \
           )"
-          echo "Instance IP: ${{ env.INSTANCE_IP }}"
 
       - name: 'Stop App'
         uses: appleboy/ssh-action@master
