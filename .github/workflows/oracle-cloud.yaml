@@ -88,7 +88,7 @@ jobs:
               --availability-domain ${{secrets.VM_AVAILABILITY_DOMAIN}} \
               --shape ${{secrets.VM_SHAPE}} \
               --assign-public-ip true \
-              --display-name cicd-demo \
+              --display-name mn-oci-final-image \
               --image-id ${{secrets.VM_CUSTOM_IMAGE_OCID}} \
               --ssh-authorized-keys-file /home/runner/.oci/id_vm.pub \
               --subnet-id ${{secrets.VM_SUBNET_OCID}} \
