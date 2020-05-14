@@ -1,4 +1,4 @@
-name: cicd-demo
+name: mn-oci-final
 on:
   push:
     branches:
@@ -11,22 +11,14 @@ jobs:
 
       - name: 'Checkout'
         uses: actions/checkout@v2
+        env:
+          - INSTANCE_NAME: mn-oci-final-image
+          - PROJECT_NAME: mn-oci-final
 
       - name: 'Setup Java 11'
         uses: actions/setup-java@v1
         with:
           java-version: 11
-
-      - name: 'Run Tests'
-        run: |
-          ./gradlew test
-
-      - name: 'Publish Test Report'
-        if: always()
-        uses: actions/upload-artifact@v2-preview
-        with:
-          name: 'test-report'
-          path: build/reports/tests/test/*
 
       - name: 'Assemble JAR'
         run: |
@@ -39,7 +31,7 @@ jobs:
       - name: 'Publish JAR'
         uses: actions/upload-artifact@v2-preview
         with:
-          name: 'cicd-demo-${{env.VERSION}}-all.jar'
+          name: '${{env.PROJECT_NAME}}-${{env.VERSION}}-all.jar'
           path: build/libs/*-all.jar
 
       - name: 'Write Config & Key Files'
@@ -74,7 +66,7 @@ jobs:
             oci compute instance list \
             --lifecycle-state RUNNING \
             --compartment-id ${{secrets.VM_COMPARTMENT_OCID}} \
-            --display-name cicd-demo \
+            --display-name ${{env.INSTANCE_NAME}} \
             --query "data [0].id" \
             --raw-output \
           )"
@@ -128,7 +120,7 @@ jobs:
           host: ${{ env.INSTANCE_IP }}
           username: opc
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          source: "build/libs/cicd-demo-${{env.VERSION}}-all.jar"
+          source: "build/libs/${{env.PROJECT_NAME}}-${{env.VERSION}}-all.jar"
           target: "app"
           strip_components: 2
 
@@ -139,5 +131,5 @@ jobs:
           username: opc
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo mv ~/app/cicd-demo-${{env.VERSION}}-all.jar /app/cicd-demo.jar
-            nohup java -jar /app/cicd-demo.jar > output.$(date --iso).log 2>&1 &
+            sudo mv ~/app/${{env.PROJECT_NAME}}-${{env.VERSION}}-all.jar /app/${{env.PROJECT_NAME}}.jar
+            nohup java -jar /app/${{env.PROJECT_NAME}}.jar > output.$(date --iso).log 2>&1 &
