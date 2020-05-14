@@ -9,7 +9,7 @@ See branch step 1: https://github.com/recursivecodes/mn-oci-final/tree/step-1
 Create an app with the CLI.
 
 ```bash
-mn create-app codes.recursive.mn-oci-final --features data-jpa --jdk 11
+mn create-app codes.recursive.mn-oci --features data-jpa --jdk 11
 ```
 
 ### 1.2
