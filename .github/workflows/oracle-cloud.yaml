@@ -28,7 +28,7 @@ jobs:
       - name: 'Publish JAR'
         uses: actions/upload-artifact@v2-preview
         with:
-          name: 'mn-oci-final-${{env.VERSION}}-all.jar'
+          name: 'mn-oci-${{env.VERSION}}-all.jar'
           path: build/libs/*-all.jar
 
       - name: 'Write Config & Key Files'
@@ -117,7 +117,7 @@ jobs:
           host: ${{ env.INSTANCE_IP }}
           username: opc
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          source: "build/libs/mn-oci-final-${{env.VERSION}}-all.jar"
+          source: "build/libs/mn-oci-${{env.VERSION}}-all.jar"
           target: "app"
           strip_components: 2
 
@@ -128,5 +128,5 @@ jobs:
           username: opc
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
           script: |
-            sudo mv ~/app/mn-oci-final-${{env.VERSION}}-all.jar /app/mn-oci-final.jar
-            nohup java -jar /app/mn-oci-final.jar > output.$(date --iso).log 2>&1 &
+            sudo mv ~/app/mn-oci-${{env.VERSION}}-all.jar /app/mn-oci.jar
+            nohup java -jar /app/mn-oci.jar > output.$(date --iso).log 2>&1 &
