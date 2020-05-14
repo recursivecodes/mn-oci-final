@@ -2,6 +2,8 @@
 
 ## Step 1 - Create App
 
+See branch step 1: https://github.com/recursivecodes/mn-oci-final/tree/step-1
+
 ### 1.1
 
 Create an app with the CLI.
@@ -74,4 +76,28 @@ This is localhost
 
 ## Step 2 - Setup Build & Deploy
 
+See branch step 2: https://github.com/recursivecodes/mn-oci-final/tree/step-2
+
+### Prerequisites: 
+
+The following GitHub secrets need to be created ahead of time:
+
+| Name                      |
+| ------------------------- |
+| OCI_USER_OCID             |
+| OCI_FINGERPRINT           |
+| OCI_PASSPHRASE            |
+| OCI_REGION                |
+| OCI_TENANCY_OCID          |
+| OCI_KEY_FILE              |
+| VM_SSH_PUB_KEY            |
+| VM_SSH_PRIVATE_KEY        |
+| VM_COMPARTMENT_OCID       |
+| VM_AVAILABILITY_DOMAIN    |
+| VM_SHAPE                  |
+| VM_CUSTOM_IMAGE_OCID      |
+| VM_SUBNET_OCID            |
+
 ### 2.1
+
+Add `.github/workflows/oracle-cloud.yaml`
