@@ -96,6 +96,13 @@ jobs:
           )"
           echo "1"
 
+      - name: 'Wait for SSH'
+        run: |
+          while ! nc -w5 -z ${{ env.INSTANCE_IP }} 22; do
+                  sleep 5
+                  echo "SSH not available..."
+          done; echo "SSH ready!"
+
       - name: 'Stop App'
         uses: appleboy/ssh-action@master
         with:
