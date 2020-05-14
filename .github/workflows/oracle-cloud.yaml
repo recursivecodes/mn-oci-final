@@ -94,6 +94,7 @@ jobs:
             --query 'data [0]."public-ip"' \
             --raw-output \
           )"
+          echo "1"
 
       - name: 'Stop App'
         uses: appleboy/ssh-action@master
