@@ -94,7 +94,6 @@ jobs:
             --query 'data [0]."public-ip"' \
             --raw-output \
           )"
-          echo "got it"
 
       - name: 'Stop App'
         uses: appleboy/ssh-action@master
@@ -102,6 +101,7 @@ jobs:
           host: ${{ env.INSTANCE_IP }}
           username: opc
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          timeout: 60s
           script: |
             pid=`ps aux | grep "[m]n-oci-final-image" | awk '{print $2}'`
             if [ "$pid" == "" ]; then
