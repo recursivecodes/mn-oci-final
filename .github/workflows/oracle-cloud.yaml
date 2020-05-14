@@ -102,7 +102,7 @@ jobs:
           host: ${{ env.INSTANCE_IP }}
           username: opc
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          timeout: 60s
+          timeout: 300s
           script: |
             pid=`ps aux | grep "[m]n-oci.jar" | awk '{print $2}'`
             if [ "$pid" == "" ]; then
