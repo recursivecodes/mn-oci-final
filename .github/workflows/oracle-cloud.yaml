@@ -12,8 +12,8 @@ jobs:
       - name: 'Checkout'
         uses: actions/checkout@v2
         env:
-          - INSTANCE_NAME: mn-oci-final-image
-          - PROJECT_NAME: mn-oci-final
+          INSTANCE_NAME: mn-oci-final-image
+          PROJECT_NAME: mn-oci-final
 
       - name: 'Setup Java 11'
         uses: actions/setup-java@v1
