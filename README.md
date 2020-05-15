@@ -1,5 +1,7 @@
 # mn-oci-final
 
+![mn-oci-final](https://github.com/recursivecodes/mn-oci-final/workflows/mn-oci-final/badge.svg)
+
 ## Step 1 - Create App
 
 See branch step 1: https://github.com/recursivecodes/mn-oci-final/tree/step-1
