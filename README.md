@@ -83,7 +83,7 @@ See branch step 2: https://github.com/recursivecodes/mn-oci-final/tree/step-2
 The following GitHub secrets need to be created ahead of time:
 
 | Name                      |
-| ------------------------- |
+| :------------------------ |
 | OCI_USER_OCID             |
 | OCI_FINGERPRINT           |
 | OCI_PASSPHRASE            |
@@ -106,6 +106,7 @@ Add `.github/workflows/oracle-cloud.yaml`
 
 Populate `oracle-cloud.yaml`.
 
+#### 2.2.1
 ```yaml
 name: mn-oci-final
 on:
@@ -116,6 +117,9 @@ jobs:
   build-job:
     name: Build Job
     runs-on: ubuntu-latest
+```
+#### 2.2.2
+```yaml
     steps:
 
       - name: 'Checkout'
@@ -129,7 +133,9 @@ jobs:
       - name: 'Assemble JAR'
         run: |
           ./gradlew assemble
-
+```
+#### 2.2.3
+```yaml
       - name: 'Get Version Number'
         run: |
           echo "::set-env name=VERSION::$(./gradlew properties -q | grep "version:" | awk '{print $2}')"
@@ -139,7 +145,10 @@ jobs:
         with:
           name: 'mn-oci-${{env.VERSION}}-all.jar'
           path: build/libs/*-all.jar
+```
 
+#### 2.2.4
+```yaml
       - name: 'Write Config & Key Files'
         run: |
           mkdir ~/.oci
@@ -165,7 +174,11 @@ jobs:
         run: |
           oci setup repair-file-permissions --file /home/runner/.oci/config
           oci setup repair-file-permissions --file /home/runner/.oci/key.pem
+```
 
+#### 2.2.5
+
+```yaml
       - name: 'Check Existing Instance'
         run: |
           echo "::set-env name=INSTANCE_OCID::$( \
@@ -194,7 +207,11 @@ jobs:
               --query "data.id" \
               --raw-output \
           )"
+```
 
+#### 2.2.6
+
+```yaml
       - name: 'Get Instance IP'
         run: |
           echo "::set-env name=INSTANCE_IP::$( \
@@ -204,14 +221,21 @@ jobs:
             --raw-output \
           )"
           echo "1"
+```
 
+#### 2.2.7
+```yaml
       - name: 'Wait for SSH'
         run: |
           while ! nc -w5 -z ${{ env.INSTANCE_IP }} 22; do
                   sleep 5
                   echo "SSH not available..."
           done; echo "SSH ready!"
+```
 
+#### 2.2.8
+
+```yaml
       - name: 'Stop App'
         uses: appleboy/ssh-action@master
         with:
@@ -227,7 +251,11 @@ jobs:
               kill -9 $pid
             fi
             sudo mkdir -p /app
+```
 
+#### 2.2.9
+
+```yaml
       - name: 'Push JAR'
         uses: appleboy/scp-action@master
         with:
@@ -237,7 +265,11 @@ jobs:
           source: "build/libs/mn-oci-${{env.VERSION}}-all.jar"
           target: "app"
           strip_components: 2
+```
 
+#### 2.2.10
+
+```yaml
       - name: 'Start App'
         uses: appleboy/ssh-action@master
         with:
