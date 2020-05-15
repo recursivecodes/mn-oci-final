@@ -172,7 +172,7 @@ jobs:
             oci compute instance list \
             --lifecycle-state RUNNING \
             --compartment-id ${{secrets.VM_COMPARTMENT_OCID}} \
-            --display-name mn-oci-image \
+            --display-name mn-oci \
             --query "data [0].id" \
             --raw-output \
           )"
@@ -186,7 +186,7 @@ jobs:
               --availability-domain ${{secrets.VM_AVAILABILITY_DOMAIN}} \
               --shape ${{secrets.VM_SHAPE}} \
               --assign-public-ip true \
-              --display-name mn-oci-image \
+              --display-name mn-oci \
               --image-id ${{secrets.VM_CUSTOM_IMAGE_OCID}} \
               --ssh-authorized-keys-file /home/runner/.oci/id_vm.pub \
               --subnet-id ${{secrets.VM_SUBNET_OCID}} \
@@ -262,3 +262,6 @@ codes:
 ### 2.4 
 
 Push to GitHub and observe build. When complete, hit the `/hello` endpoint in the cloud and observe the value returned is from `application-oracle-cloud.yaml` instead of the value from `application.yaml`.
+
+## Step 3 - Configure App & Dependencies
+
