@@ -299,3 +299,85 @@ Push to GitHub and observe build. When complete, hit the `/hello` endpoint in th
 
 ## Step 3 - Configure App & Dependencies
 
+### 3.1
+
+Change connection pool dependency:
+
+From:
+
+```groovy
+implementation("io.micronaut.configuration:micronaut-jdbc-tomcat")
+```
+
+To: 
+
+```groovy
+implementation("io.micronaut.configuration:micronaut-jdbc-ucp")
+```
+
+#### 3.1.1
+
+Add ojdbc dependency:
+
+```groovy
+implementation("com.oracle.database.jdbc:ojdbc10:19.6.0.0")
+```
+
+### 3.2
+
+Add system properties to all `JavaExec` tasks in `build.gradle`:
+
+```groovy 
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+    systemProperties System.properties
+}
+```
+
+### 3.3
+
+Modify datasource in `application.yml`:
+
+From:
+
+```yaml
+datasources:
+  default:
+    url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+    schema-generate: CREATE_DROP
+    dialect: H2
+```
+
+To: 
+
+```yaml
+datasources:
+  default:
+    url: jdbc:oracle:thin:@barnevents_low?TNS_ADMIN=/wallet
+    connectionFactoryClassName: oracle.jdbc.pool.OracleDataSource
+    username: testuser
+    schema-generate: CREATE_DROP
+    dialect: ORACLE
+    minPoolSize: 1
+    maxPoolSize: 10
+```
+
+### 3.4
+
+Add VM Option to run/debug config:
+
+```bash
+-Ddatasources.default.password=SuperStr0ngPa$$word_
+```
+
+### 3.5
+
+Disable FAN in `Application.java`:
+
+```java
+System.setProperty("oracle.jdbc.fanEnabled", "false");
+```

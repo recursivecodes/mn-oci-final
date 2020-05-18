@@ -29,7 +29,8 @@ dependencies {
     implementation("javax.annotation:javax.annotation-api")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut.configuration:micronaut-jdbc-tomcat")
+    implementation("io.micronaut.configuration:micronaut-jdbc-ucp")
+    implementation("com.oracle.database.jdbc:ojdbc10:19.6.0.0")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
     runtimeOnly("com.h2database:h2")
@@ -39,6 +40,9 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation("io.micronaut.test:micronaut-test-junit5")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+
+    implementation("io.micronaut.configuration:micronaut-jdbc-ucp")
+
 }
 
 test.classpath += configurations.developmentOnly
@@ -67,6 +71,7 @@ shadowJar {
 tasks.withType(JavaExec) {
     classpath += configurations.developmentOnly
     jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+    systemProperties System.properties
 }
 
 
