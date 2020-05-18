@@ -103,7 +103,7 @@ jobs:
                   echo "SSH not available..."
           done; echo "SSH ready!"
 
-      - name: 'Create Wallet On VM'
+      - name: 'Create OCI Config On VM'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ env.INSTANCE_IP }}
