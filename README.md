@@ -299,7 +299,7 @@ Push to GitHub and observe build. When complete, hit the `/hello` endpoint in th
 
 ## Step 3 - Configure App & Dependencies
 
-### 3.1
+### 4.1
 
 Change connection pool dependency:
 
@@ -315,7 +315,7 @@ To:
 implementation("io.micronaut.configuration:micronaut-jdbc-ucp")
 ```
 
-#### 3.1.1
+#### 4.1.1
 
 Add ojdbc dependency:
 
@@ -323,7 +323,7 @@ Add ojdbc dependency:
 implementation("com.oracle.database.jdbc:ojdbc10:19.6.0.0")
 ```
 
-### 3.2
+### 4.2
 
 Add system properties to all `JavaExec` tasks in `build.gradle`:
 
@@ -335,7 +335,7 @@ tasks.withType(JavaExec) {
 }
 ```
 
-### 3.3
+### 4.3
 
 Modify datasource in `application.yml`:
 
@@ -366,7 +366,7 @@ datasources:
     maxPoolSize: 10
 ```
 
-### 3.4
+### 4.4
 
 Add VM Option to run/debug config:
 
@@ -374,7 +374,7 @@ Add VM Option to run/debug config:
 -Ddatasources.default.password=SuperStr0ngPa$$word_
 ```
 
-### 3.5
+### 4.5
 
 Disable FAN in `Application.java`:
 
