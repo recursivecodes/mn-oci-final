@@ -453,3 +453,27 @@ Run application, hit endpoint, confirm.
   "test": "This is localhost"
 }
 ```
+
+### 3.7
+
+Add step to `.github/workflows/oracle-cloud.yaml` to create OCI config directory on VM.
+
+```yaml
+- name: 'Create OCI Config On VM'
+uses: appleboy/ssh-action@master
+with:
+  host: ${{ env.INSTANCE_IP }}
+  username: opc
+  key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+  timeout: 30s
+  script: |
+    mkdir ~/.oci
+    echo "[DEFAULT]" >> ~/.oci/config
+    echo "user=${{secrets.OCI_USER_OCID}}" >> ~/.oci/config
+    echo "fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.oci/config
+    echo "pass_phrase=${{secrets.OCI_PASSPHRASE}}" >> ~/.oci/config
+    echo "region=${{secrets.OCI_REGION}}" >> ~/.oci/config
+    echo "tenancy=${{secrets.OCI_TENANCY_OCID}}" >> ~/.oci/config
+    echo "key_file=~/.oci/key.pem" >> ~/.oci/config
+    echo "${{secrets.OCI_KEY_FILE}}" >> ~/.oci/key.pem
+``` 
