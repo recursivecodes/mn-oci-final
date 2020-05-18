@@ -13,3 +13,4 @@ jpa.default.properties.hibernate.hbm2ddl.auto: update
 codes:
   recursive:
     test: 'This is localhost'
+    foo: ${FOO}

@@ -296,3 +296,160 @@ codes:
 ### 2.4 
 
 Push to GitHub and observe build. When complete, hit the `/hello` endpoint in the cloud and observe the value returned is from `application-oracle-cloud.yaml` instead of the value from `application.yaml`.
+
+## Step 3 - OCI Vault as Distributed Config
+
+### 3.1
+
+Add dependencies:
+
+```groovy
+compile "io.micronaut:micronaut-discovery-client"
+compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-vault', version: '1.15.4'
+compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-secrets', version: '1.15.4'
+compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '1.15.4'
+```
+
+### 3.2
+
+Create vault & secret(s).
+
+#### 3.2.1
+
+Click 'Security' -> Vault from the OCI console.
+
+![vault-1](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-1.png)
+
+#### 3.2.2
+
+Click 'Create Vault'.
+
+![vault-2](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-2.png)
+
+#### 3.2.3
+
+Name the vault and click 'Create'.
+
+![vault-3](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-3.png)
+
+#### 3.2.4
+
+Select the newly created vault.
+
+![vault-4](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-4.png)
+
+#### 3.2.5
+
+Click 'Create Key'.
+
+![vault-5](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-5.png)
+
+#### 3.2.6
+
+Name the key and select algorithm and shape.
+
+![vault-6](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-6.png)
+
+#### 3.2.7
+
+Click 'Create Secret'.
+
+![vault-7](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-7.png)
+
+#### 3.2.8
+
+Give the secret a name (1), choose the encryption key (2), enter the secret contents in plain text (3) and click 'Create Secret' (4).
+
+![vault-8](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-12.png)
+
+#### 3.2.9
+
+Copy the vault OCID for use in step 3.3.
+
+![vault-9](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-9.png)
+
+#### 3.2.10
+
+Click 'Identity' -> 'Compartments' in the OCI console sidebar.
+
+![vault-10](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-10.png)
+
+#### 3.2.11
+
+Find the compartment that the vault resides in and copy the compartment OCID for use in step 3.3.
+
+![vault-11](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-11.png)
+
+### 3.3
+
+Create config at `src/resources/bootstrap.yml`.
+
+```yaml
+micronaut:
+  application:
+    name: vault-test
+  config-client:
+    enabled: true
+oraclecloud:
+  vault:
+    config:
+      enabled: true
+    vaults:
+      - ocid: ocid1.vault.oc1.phx.a5pmffwuaafna.abyhqljsshgiqtcpsmzdv7do6s2lcm55qdym7avmj5ipmdk7scuas5qsfk5q
+        compartment-ocid: ocid1.compartment.oc1..aaaaaaaa7lzppsdxt6j56zhpvy6u5gyrenwyc2e2h4fak5ydvv6kt7anizbq
+    use-instance-principal: false
+    path-to-config: ~/.oci/config
+    profile: DEFAULT
+    region: US-PHOENIX-1
+```
+
+### 3.4
+
+Modify `application.yml` to use vault secret as configuration variable.
+
+```yaml
+codes:
+  recursive:
+    test: 'This is localhost'
+    foo: ${FOO}
+```
+
+### 3.5
+
+Modify controller to return distributed config var.
+
+```java
+@Controller("/hello")
+public class HelloController {
+
+    private String test;
+    private String foo;
+
+    public HelloController(
+            @Property(name = "codes.recursive.test") String test,
+            @Property(name = "codes.recursive.foo") String foo
+        ) {
+        this.test = test;
+        this.foo = foo;
+    }
+
+    @Get(uri = "/", produces = MediaType.APPLICATION_JSON)
+    public Map index() {
+        return Map.of(
+                "test", test,
+                "foo", foo
+        );
+    }
+}
+```
+
+### 3.6
+
+Run application, hit endpoint, confirm.
+
+```json
+{
+  "foo": "BAR",
+  "test": "This is localhost"
+}
+```

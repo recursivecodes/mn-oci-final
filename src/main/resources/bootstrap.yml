@@ -1,0 +1,16 @@
+micronaut:
+  application:
+    name: vault-test
+  config-client:
+    enabled: true
+oraclecloud:
+  vault:
+    config:
+      enabled: true
+    vaults:
+      - ocid: ocid1.vault.oc1.phx.a5pmffwuaafna.abyhqljsshgiqtcpsmzdv7do6s2lcm55qdym7avmj5ipmdk7scuas5qsfk5q
+        compartment-ocid: ocid1.compartment.oc1..aaaaaaaa7lzppsdxt6j56zhpvy6u5gyrenwyc2e2h4fak5ydvv6kt7anizbq
+    use-instance-principal: false
+    path-to-config: ~/.oci/config
+    profile: DEFAULT
+    region: US-PHOENIX-1
