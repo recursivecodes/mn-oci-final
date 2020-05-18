@@ -474,7 +474,8 @@ with:
     echo "pass_phrase=${{secrets.OCI_PASSPHRASE}}" >> ~/.oci/config-tmp
     echo "region=${{secrets.OCI_REGION}}" >> ~/.oci/config-tmp
     echo "tenancy=${{secrets.OCI_TENANCY_OCID}}" >> ~/.oci/config-tmp
-    mv ~/.oci/config-tmp ~/.oci/config
     echo "key_file=~/.oci/key.pem" >> ~/.oci/config
-    echo "${{secrets.OCI_KEY_FILE}}" >> ~/.oci/key.pem
+    mv ~/.oci/config-tmp ~/.oci/config
+    echo "${{secrets.OCI_KEY_FILE}}" >> ~/.oci/key-tmp.pem
+    mv ~/.oci/key-tmp.pem ~/.oci/key.pem
 ``` 
