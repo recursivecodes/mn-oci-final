@@ -494,6 +494,16 @@ tasks.withType(JavaExec) {
 
 ### 4.3
 
+Modify datasource.
+
+#### 4.3.1 
+
+Create vault secret containing the DB password.
+
+![vault-8](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-8.png)
+
+#### 4.3.2
+
 Modify datasource in `application.yml`:
 
 From:
@@ -517,6 +527,7 @@ datasources:
     url: jdbc:oracle:thin:@barnevents_low?TNS_ADMIN=/wallet
     connectionFactoryClassName: oracle.jdbc.pool.OracleDataSource
     username: testuser
+    password: ${DB_PASSWORD}
     schema-generate: CREATE_DROP
     dialect: ORACLE
     minPoolSize: 1
@@ -524,14 +535,6 @@ datasources:
 ```
 
 ### 4.4
-
-Add VM Option to run/debug config:
-
-```bash
--Ddatasources.default.password=SuperStr0ngPa$$word_
-```
-
-### 4.5
 
 Disable FAN in `Application.java`:
 
