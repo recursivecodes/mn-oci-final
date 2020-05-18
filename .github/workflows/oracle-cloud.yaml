@@ -103,13 +103,31 @@ jobs:
                   echo "SSH not available..."
           done; echo "SSH ready!"
 
+      - name: 'Create Wallet On VM'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.INSTANCE_IP }}
+          username: opc
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          timeout: 30s
+          script: |
+            mkdir ~/.oci
+            echo "[DEFAULT]" >> ~/.oci/config
+            echo "user=${{secrets.OCI_USER_OCID}}" >> ~/.oci/config
+            echo "fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.oci/config
+            echo "pass_phrase=${{secrets.OCI_PASSPHRASE}}" >> ~/.oci/config
+            echo "region=${{secrets.OCI_REGION}}" >> ~/.oci/config
+            echo "tenancy=${{secrets.OCI_TENANCY_OCID}}" >> ~/.oci/config
+            echo "key_file=~/.oci/key.pem" >> ~/.oci/config
+            echo "${{secrets.OCI_KEY_FILE}}" >> ~/.oci/key.pem
+
       - name: 'Stop App'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ env.INSTANCE_IP }}
           username: opc
           key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-          timeout: 300s
+          timeout: 30s
           script: |
             pid=`ps aux | grep "[m]n-oci.jar" | awk '{print $2}'`
             if [ "$pid" == "" ]; then
