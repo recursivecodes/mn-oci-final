@@ -41,8 +41,10 @@ dependencies {
     testImplementation("io.micronaut.test:micronaut-test-junit5")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
-    implementation("io.micronaut.configuration:micronaut-jdbc-ucp")
-
+    compile "io.micronaut:micronaut-discovery-client"
+    compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-vault', version: '1.15.4'
+    compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-secrets', version: '1.15.4'
+    compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '1.15.4'
 }
 
 test.classpath += configurations.developmentOnly
