@@ -467,24 +467,24 @@ Add step to `.github/workflows/oracle-cloud.yaml` to create OCI config directory
 
 ```yaml
 - name: 'Create OCI Config On VM'
-uses: appleboy/ssh-action@master
-with:
-  host: ${{ env.INSTANCE_IP }}
-  username: opc
-  key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
-  timeout: 30s
-  script: |
-    mkdir -p ~/.oci
-    echo "[DEFAULT]" >> ~/.oci/config-tmp
-    echo "user=${{secrets.OCI_USER_OCID}}" >> ~/.oci/config-tmp
-    echo "fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.oci/config-tmp
-    echo "pass_phrase=${{secrets.OCI_PASSPHRASE}}" >> ~/.oci/config-tmp
-    echo "region=${{secrets.OCI_REGION}}" >> ~/.oci/config-tmp
-    echo "tenancy=${{secrets.OCI_TENANCY_OCID}}" >> ~/.oci/config-tmp
-    echo "key_file=~/.oci/key.pem" >> ~/.oci/config-tmp
-    mv ~/.oci/config-tmp ~/.oci/config
-    echo "${{secrets.OCI_KEY_FILE}}" >> ~/.oci/key-tmp.pem
-    mv ~/.oci/key-tmp.pem ~/.oci/key.pem
+  uses: appleboy/ssh-action@master
+  with:
+    host: ${{ env.INSTANCE_IP }}
+    username: opc
+    key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+    timeout: 30s
+    script: |
+      mkdir -p ~/.oci
+      echo "[DEFAULT]" >> ~/.oci/config-tmp
+      echo "user=${{secrets.OCI_USER_OCID}}" >> ~/.oci/config-tmp
+      echo "fingerprint=${{secrets.OCI_FINGERPRINT}}" >> ~/.oci/config-tmp
+      echo "pass_phrase=${{secrets.OCI_PASSPHRASE}}" >> ~/.oci/config-tmp
+      echo "region=${{secrets.OCI_REGION}}" >> ~/.oci/config-tmp
+      echo "tenancy=${{secrets.OCI_TENANCY_OCID}}" >> ~/.oci/config-tmp
+      echo "key_file=~/.oci/key.pem" >> ~/.oci/config-tmp
+      mv ~/.oci/config-tmp ~/.oci/config
+      echo "${{secrets.OCI_KEY_FILE}}" >> ~/.oci/key-tmp.pem
+      mv ~/.oci/key-tmp.pem ~/.oci/key.pem
 ```
 
 ## Step 4 - Configure App & Dependencies
@@ -588,6 +588,30 @@ annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
 ### 5.2
 
+Add a build step to write the ATP wallet files to the VM.
+
+```yaml
+- name: 'Write Wallet'
+  uses: appleboy/ssh-action@master
+  with:
+    host: ${{ env.INSTANCE_IP }}
+    username: opc
+    key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+    script: |
+      sudo mkdir -p /wallet
+      sudo mkdir -p /wallet-tmp
+      sudo sh -c 'echo "${{secrets.WALLET_CWALLET}}" | base64 -d >> /wallet-tmp/cwallet.sso'
+      sudo sh -c 'echo "${{secrets.WALLET_EWALLET}}" | base64 -d >> /wallet-tmp/ewallet.p12'
+      sudo sh -c 'echo "${{secrets.WALLET_KEYSTORE}}" | base64 -d >> /wallet-tmp/keystore.jks'
+      sudo sh -c 'echo "${{secrets.WALLET_OJDBC}}" | base64 -d >> /wallet-tmp/ojdbc.properties'
+      sudo sh -c 'echo "${{secrets.WALLET_SQLNET}}" | base64 -d >> /wallet-tmp/sqlnet.ora'
+      sudo sh -c 'echo "${{secrets.WALLET_TNSNAMES}}" | base64 -d >> /wallet-tmp/tnsnames.ora'
+      sudo sh -c 'echo "${{secrets.WALLET_TRUSTSTORE}}" | base64 -d >> /wallet-tmp/truststore.jks'
+      sudo mv /wallet-tmp/* /wallet/
+```
+
+### 5.3
+
 Create an entity at `src/main/java/codes/recursive/domain/Person.java`.
 
 ```java
@@ -611,7 +635,7 @@ public class Person {
 }
 ```
 
-### 5.3 
+### 5.4 
 
 Create a repository at `src/main/java/codes/recursive/repository/PersonRepository.java`.
 
@@ -626,7 +650,7 @@ import io.micronaut.data.repository.CrudRepository;
 public interface PersonRepository extends CrudRepository<Person, Long> {}
 ```
 
-### 5.4
+### 5.5
 
 Add CRUD methods to controller.
 
@@ -653,11 +677,11 @@ public HttpResponse savePerson(Person person) {
 }
 ```
 
-### 5.5
+### 5.6
 
 Start app and test endpoints.
 
-#### 5.5.1
+#### 5.6.1
 
 Save a person:
 
@@ -681,7 +705,7 @@ Returns:
 }
 ```
 
-#### 5.5.2
+#### 5.6.2
 
 Save an invalid person:
 
@@ -716,7 +740,7 @@ Returns:
 }
 ```
 
-#### 5.5.3
+#### 5.6.3
 
 Get a person by ID:
 
@@ -737,7 +761,7 @@ Returns:
 }
 ```
 
-#### 5.5.4
+#### 5.6.4
 
 Get all persons:
 
