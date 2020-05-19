@@ -36,7 +36,6 @@ dependencies {
     implementation("com.oracle.database.jdbc:ojdbc10:19.6.0.0")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
-    runtimeOnly("com.h2database:h2")
     testAnnotationProcessor(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
     testAnnotationProcessor("io.micronaut:micronaut-inject-java")
     testImplementation(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
