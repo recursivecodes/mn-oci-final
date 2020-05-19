@@ -149,6 +149,24 @@ jobs:
           target: "app"
           strip_components: 2
 
+      - name: 'Write Wallet'
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.INSTANCE_IP }}
+          username: opc
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          script: |
+            sudo mkdir -p /wallet
+            sudo mkdir -p /wallet-tmp
+            sudo sh -c 'echo "${{secrets.WALLET_CWALLET}}" | base64 -d >> /wallet-tmp/cwallet.sso'
+            sudo sh -c 'echo "${{secrets.WALLET_EWALLET}}" | base64 -d >> /wallet-tmp/ewallet.p12'
+            sudo sh -c 'echo "${{secrets.WALLET_KEYSTORE}}" | base64 -d >> /wallet-tmp/keystore.jks'
+            sudo sh -c 'echo "${{secrets.WALLET_OJDBC}}" | base64 -d >> /wallet-tmp/ojdbc.properties'
+            sudo sh -c 'echo "${{secrets.WALLET_SQLNET}}" | base64 -d >> /wallet-tmp/sqlnet.ora'
+            sudo sh -c 'echo "${{secrets.WALLET_TNSNAMES}}" | base64 -d >> /wallet-tmp/tnsnames.ora'
+            sudo sh -c 'echo "${{secrets.WALLET_TRUSTSTORE}}" | base64 -d >> /wallet-tmp/truststore.jks'
+            sudo mv /wallet-tmp/* /wallet/
+
       - name: 'Start App'
         uses: appleboy/ssh-action@master
         with:
