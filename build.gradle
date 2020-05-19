@@ -18,6 +18,9 @@ configurations {
 }
 
 dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
     annotationProcessor(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
     annotationProcessor("io.micronaut:micronaut-inject-java")
     annotationProcessor("io.micronaut:micronaut-validation")
@@ -32,6 +35,7 @@ dependencies {
     implementation("io.micronaut.configuration:micronaut-jdbc-ucp")
     implementation("com.oracle.database.jdbc:ojdbc10:19.6.0.0")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.micronaut.configuration:micronaut-hibernate-jpa")
     runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
     runtimeOnly("com.h2database:h2")
     testAnnotationProcessor(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
@@ -45,6 +49,7 @@ dependencies {
     compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-vault', version: '1.17.3'
     compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-secrets', version: '1.17.3'
     compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '1.17.3'
+
 }
 
 test.classpath += configurations.developmentOnly

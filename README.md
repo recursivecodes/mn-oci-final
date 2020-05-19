@@ -567,3 +567,19 @@ Disable FAN in `Application.java`:
 ```java
 System.setProperty("oracle.jdbc.fanEnabled", "false");
 ```
+
+## Step 5 - Add Model, Repo & CRUD Methods To Controller
+
+### 5.1
+
+Add lombok dependencies to `build.gradle`.
+
+```groovy
+compileOnly 'org.projectlombok:lombok:1.18.12'
+annotationProcessor 'org.projectlombok:lombok:1.18.12'
+```
+
+### 5.2
+
+Create an entity at `src/main/java/codes/recursive/domain/Person.java`.
+
