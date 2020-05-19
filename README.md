@@ -478,6 +478,7 @@ with:
     mv ~/.oci/config-tmp ~/.oci/config
     echo "${{secrets.OCI_KEY_FILE}}" >> ~/.oci/key-tmp.pem
     mv ~/.oci/key-tmp.pem ~/.oci/key.pem
+```
 
 ## Step 4 - Configure App & Dependencies
 
