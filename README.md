@@ -316,7 +316,7 @@ Create vault & secret(s).
 
 #### 3.2.1
 
-Click 'Security' -> Vault from the OCI console.
+Click 'Security' -> 'Vault' from the OCI console.
 
 ![vault-1](https://objectstorage.us-phoenix-1.oraclecloud.com/n/toddrsharp/b/readme-assets/o/vault-1.png)
 
