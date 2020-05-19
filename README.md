@@ -10,7 +10,7 @@ See branch step 1: https://github.com/recursivecodes/mn-oci-final/tree/step-1
 
 Create an app with the CLI.
 
-```bash
+```shell script
 mn create-app codes.recursive.mn-oci --features data-jpa --jdk 11
 ```
 
@@ -18,7 +18,7 @@ mn create-app codes.recursive.mn-oci --features data-jpa --jdk 11
 
 Add a controller.
 
-```bash
+```shell script
 mn create-controller codes.recursive.controller.Hello
 ```
 
@@ -65,7 +65,7 @@ public String index() {
 
 Run & test...
 
-```bash 
+```shell script 
 $ curl -i http://localhost:8080/hello                                                                                                                                           
 HTTP/1.1 200 OK
 Date: Thu, 14 May 2020 16:58:05 GMT
@@ -583,3 +583,180 @@ annotationProcessor 'org.projectlombok:lombok:1.18.12'
 
 Create an entity at `src/main/java/codes/recursive/domain/Person.java`.
 
+```java
+@Entity
+@Table(name = "mn-oci-demo-persons-1")
+@NoArgsConstructor
+public class Person {
+    @Id @GeneratedValue @Getter @Setter Long id;
+    @Getter @Setter @Size(min = 1, max = 10) String firstName;
+    @Getter @Setter @Size(min = 1, max = 10) String lastName;
+    @Getter @Setter @Min(1L) @Max(125L) int age;
+    @Getter @Setter @DateCreated Date dateCreated;
+    @Getter @Setter @DateUpdated Date lastUpdated;
+
+    public Person(@Size(min = 1, max = 10) String firstName, @Size(min = 1, max = 10) String lastName, @Min(1L) @Max(125L) int age) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+    }
+
+}
+```
+
+### 5.3 
+
+Create a repository at `src/main/java/codes/recursive/repository/PersonRepository.java`.
+
+```java
+package codes.recursive.repository;
+
+import codes.recursive.domain.Person;
+import io.micronaut.data.annotation.Repository;
+import io.micronaut.data.repository.CrudRepository;
+
+@Repository
+public interface PersonRepository extends CrudRepository<Person, Long> {}
+```
+
+### 5.4
+
+Add CRUD methods to controller.
+
+```java
+@Get("/persons")
+public HttpResponse getPersons() {
+    return HttpResponse.ok(
+            personRepository.findAll()
+    );
+}
+
+@Get("/person/{id}")
+public HttpResponse getPerson(Long id) {
+    return HttpResponse.ok(
+            personRepository.findById(id)
+    );
+}
+
+@Post("/person")
+public HttpResponse savePerson(Person person) {
+    return HttpResponse.created(
+            personRepository.save(person)
+    );
+}
+```
+
+### 5.5
+
+Start app and test endpoints.
+
+#### 5.5.1
+
+Save a person:
+
+```shell script
+$ curl -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"firstName": "Todd", "lastName": "Sharp", "age": 43}' \
+    http://localhost:8080/hello/person | jq  
+```
+
+Returns:
+
+```json
+{
+  "id": 67,
+  "firstName": "Todd",
+  "lastName": "Zharp",
+  "age": 43,
+  "dateCreated": 1589903508873,
+  "lastUpdated": 1589903508873
+}
+```
+
+#### 5.5.2
+
+Save an invalid person:
+
+```shell script
+$ curl -X POST \
+    -H "Content-Type: application/json" \
+    -d '{"firstName": "Todd", "lastName": "Longlastname", "age": 143}' \
+    http://localhost:8080/hello/person | jq  
+```
+
+Returns:
+
+```json
+{
+  "message": "Bad Request",
+  "_links": {
+    "self": {
+      "href": "/hello/person",
+      "templated": false
+    }
+  },
+  "_embedded": {
+    "errors": [
+      {
+        "message": "entity.age: must be less than or equal to 125"
+      },
+      {
+        "message": "entity.lastName: size must be between 1 and 10"
+      }
+    ]
+  }
+}
+```
+
+#### 5.5.3
+
+Get a person by ID:
+
+```shell script
+$ curl http://localhost:8080/hello/person/67 | jq                                                                                                              
+```
+
+Returns:
+
+```json
+{
+  "id": 67,
+  "firstName": "Todd",
+  "lastName": "Sharp",
+  "age": 43,
+  "dateCreated": 1589903508000,
+  "lastUpdated": 1589903508000
+}
+```
+
+#### 5.5.4
+
+Get all persons:
+
+```shell script
+curl http://localhost:8080/hello/persons | jq  
+```
+
+Returns:
+
+```json
+[
+  {
+    "id": 64,
+    "firstName": "T",
+    "lastName": "Sharp",
+    "age": 43,
+    "dateCreated": 1589902358000,
+    "lastUpdated": 1589902358000
+  },
+  {
+    "id": 65,
+    "firstName": "T",
+    "lastName": "Sharp",
+    "age": 43,
+    "dateCreated": 1589903057000,
+    "lastUpdated": 1589903057000
+  }
+]
+```
