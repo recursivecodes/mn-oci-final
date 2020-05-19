@@ -305,9 +305,9 @@ Add dependencies:
 
 ```groovy
 compile "io.micronaut:micronaut-discovery-client"
-compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-vault', version: '1.15.4'
-compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-secrets', version: '1.15.4'
-compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '1.15.4'
+compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-vault', version: '1.17.3'
+compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-secrets', version: '1.17.3'
+compile group: 'com.oracle.oci.sdk', name: 'oci-java-sdk-common', version: '1.17.3'
 ```
 
 ### 3.2
