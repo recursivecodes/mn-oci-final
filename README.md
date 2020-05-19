@@ -99,6 +99,13 @@ The following GitHub secrets need to be created ahead of time:
 | VM_SHAPE                  |
 | VM_CUSTOM_IMAGE_OCID      |
 | VM_SUBNET_OCID            |
+| WALLET_CWALLET            |
+| WALLET_EWALLET            |
+| WALLET_KEYSTORE           |
+| WALLET_OJDBC              |
+| WALLET_SQLNET             |
+| WALLET_TNSNAMES           |
+| WALLET_TRUSTSTORE         |
 
 ### 2.1
 
