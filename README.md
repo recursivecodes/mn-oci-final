@@ -306,6 +306,8 @@ Push to GitHub and observe build. When complete, hit the `/hello` endpoint in th
 
 ## Step 3 - OCI Vault as Distributed Config
 
+See branch step 3: https://github.com/recursivecodes/mn-oci-final/tree/step-3
+
 ### 3.1
 
 Add dependencies:
@@ -489,6 +491,8 @@ Add step to `.github/workflows/oracle-cloud.yaml` to create OCI config directory
 
 ## Step 4 - Configure App & Dependencies
 
+See branch step 4: https://github.com/recursivecodes/mn-oci-final/tree/step-4
+
 ### 4.1
 
 Change connection pool dependency:
@@ -576,6 +580,8 @@ System.setProperty("oracle.jdbc.fanEnabled", "false");
 ```
 
 ## Step 5 - Add Model, Repo & CRUD Methods To Controller
+
+See branch step 5: https://github.com/recursivecodes/mn-oci-final/tree/step-5
 
 ### 5.1
 
